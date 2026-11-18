@@ -25,6 +25,7 @@ async function bootstrap() {
       whitelist: true,          // срезает лишние поля
       forbidNonWhitelisted: true,
       transform: true,          // приводит типы по DTO
+      transformOptions: { enableImplicitConversion: true },
     }),
   );
 
