@@ -14,11 +14,15 @@ async function bootstrap() {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
-    app.enableCors({ origin: origins.length ? origins : true, credentials: true });
+    app.enableCors({
+        origin: origins.length === 0 || origins.includes("*") ? true : origins,
+        credentials: true,
+    });
     app.useGlobalPipes(new common_1.ValidationPipe({
         whitelist: true, // срезает лишние поля
         forbidNonWhitelisted: true,
         transform: true, // приводит типы по DTO
+        transformOptions: { enableImplicitConversion: true },
     }));
     const port = Number(process.env.PORT) || 9001;
     await app.listen(port);

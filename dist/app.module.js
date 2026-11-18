@@ -20,6 +20,7 @@ const features_module_1 = require("./modules/features/features.module");
 const payments_module_1 = require("./modules/payments/payments.module");
 const switch_module_1 = require("./modules/switch/switch.module");
 const users_module_1 = require("./modules/users/users.module");
+const theme_module_1 = require("./modules/theme/theme.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
             payments_module_1.PaymentsModule,
             switch_module_1.SwitchModule,
             users_module_1.UsersModule,
+            theme_module_1.ThemeModule,
         ],
     })
 ], AppModule);
