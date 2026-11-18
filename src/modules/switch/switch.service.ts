@@ -17,6 +17,9 @@ const LOG_LIMIT = 15_000;
 const LOG_PURGE_COUNT = 500;
 const HOST_RE = /^[a-zA-Z0-9.-]+$/;
 
+/** ISO GB and common UK labels are treated as the same country for cloaker matching. */
+const UK_COUNTRY_ALIASES = new Set(["uk", "gb", "united kingdom"]);
+
 @Injectable()
 export class SwitchService {
   constructor(@InjectDataSource() private readonly ds: DataSource) {}
@@ -55,7 +58,9 @@ export class SwitchService {
       );
     }
 
-    const logStatus = Boolean(rows[0].cloaker) && u.country === rows[0].country;
+    const logStatus =
+      Boolean(rows[0].cloaker) &&
+      this.countriesMatch(u.country, rows[0].country as string);
 
     if (logCount < LOG_LIMIT) {
       await this.ds.query(
@@ -260,6 +265,17 @@ export class SwitchService {
   async deleteAllLogs() {
     await this.ds.query(`TRUNCATE TABLE cp_user_logs RESTART IDENTITY`);
     return { message: "All logs were deleted" };
+  }
+
+  /**
+   * Exact match (case/whitespace-insensitive), plus UK ↔ GB ↔ United Kingdom.
+   * Configured cloaker country "UK"/"United Kingdom" therefore passes visitor "GB".
+   */
+  private countriesMatch(visitorCountry: string, configuredCountry: string): boolean {
+    const a = visitorCountry.trim().toLowerCase();
+    const b = configuredCountry.trim().toLowerCase();
+    if (a === b) return true;
+    return UK_COUNTRY_ALIASES.has(a) && UK_COUNTRY_ALIASES.has(b);
   }
 
   private safeHost(value: string): string {
