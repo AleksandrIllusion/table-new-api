@@ -20,4 +20,7 @@ export class UpdateThemeDto {
   @IsOptional() @IsIn(["pill","square"]) pill_shape?: string;
   @IsOptional() @IsBoolean() show_logo?: boolean;
   @IsOptional() @IsBoolean() show_payments?: boolean;
+  @IsOptional() @IsString() @MaxLength(40) font_heading?: string;
+  @IsOptional() @IsString() @MaxLength(40) font_body?: string;
+  @IsOptional() @IsInt() @Min(20) @Max(64) heading_size?: number;
 }
