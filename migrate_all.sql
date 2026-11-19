@@ -1,4 +1,4 @@
--- Все миграции витрины 004–008, идемпотентно. Применять можно повторно.
+-- Все миграции витрины 004–010, идемпотентно. Применять можно повторно.
 
 -- ===== 004_fonts_and_payments.sql =====
 -- Шрифты темы + сид 20 платёжных методов с логотипами (Simple Icons CDN, белые).
@@ -75,5 +75,23 @@ ALTER TABLE cp_storefront_theme
   ADD COLUMN IF NOT EXISTS button_icon_pos  VARCHAR(5)   NOT NULL DEFAULT 'left', -- left|right
   ADD COLUMN IF NOT EXISTS button_icon_size INTEGER      NOT NULL DEFAULT 20,     -- px
   ADD COLUMN IF NOT EXISTS button_icon_anim VARCHAR(8)   NOT NULL DEFAULT 'none'; -- none|spin|pulse|bounce|glow
+COMMIT;
+
+-- ===== 009_logo_rating_title.sql =====
+-- Размер/порядок логотипа, показ названия, размер/показ рейтинга.
+BEGIN;
+ALTER TABLE cp_storefront_theme
+  ADD COLUMN IF NOT EXISTS logo_size   INTEGER     NOT NULL DEFAULT 56,       -- px, 32..96
+  ADD COLUMN IF NOT EXISTS logo_order  VARCHAR(6)  NOT NULL DEFAULT 'before', -- before|after (относительно названия)
+  ADD COLUMN IF NOT EXISTS show_title  BOOLEAN     NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS rating_size INTEGER     NOT NULL DEFAULT 30,       -- px, 18..48
+  ADD COLUMN IF NOT EXISTS show_rating BOOLEAN     NOT NULL DEFAULT true;
+COMMIT;
+
+-- ===== 010_rating_style.sql =====
+-- Стиль блока рейтинга.
+BEGIN;
+ALTER TABLE cp_storefront_theme
+  ADD COLUMN IF NOT EXISTS rating_style VARCHAR(8) NOT NULL DEFAULT 'box'; -- box|stars|badge|minimal|bar
 COMMIT;
 
