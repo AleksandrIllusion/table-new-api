@@ -2,6 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { InjectDataSource } from "@nestjs/typeorm";
 import { DataSource } from "typeorm";
 import { CreateCountryDto } from "./dto/create-country.dto";
+import { UpdateCountryDto } from "./dto/update-country.dto";
 
 @Injectable()
 export class CountriesService {
@@ -33,5 +34,36 @@ export class CountriesService {
       [dto.country],
     );
     return row;
+  }
+
+  async update(id: number, dto: UpdateCountryDto) {
+    const [exists] = await this.ds.query(`SELECT id FROM cp_countries WHERE id = $1`, [id]);
+    if (!exists) throw new NotFoundException(`Country ${id} not found`);
+    const [dup] = await this.ds.query(
+      `SELECT id FROM cp_countries WHERE country = $1 AND id <> $2`,
+      [dto.country, id],
+    );
+    if (dup) throw new ConflictException(`Country ${dto.country} already exists`);
+    const [row] = await this.ds.query(
+      `UPDATE cp_countries SET country = $1 WHERE id = $2 RETURNING *`,
+      [dto.country, id],
+    );
+    return row;
+  }
+
+  async remove(id: number) {
+    const [hasCodes] = await this.ds.query(
+      `SELECT 1 FROM cp_country_codes WHERE country_id = $1 LIMIT 1`,
+      [id],
+    );
+    if (hasCodes) {
+      throw new ConflictException("Country still has country codes — delete those first");
+    }
+    const res = await this.ds.query(
+      `DELETE FROM cp_countries WHERE id = $1 RETURNING id`,
+      [id],
+    );
+    if (!res.length) throw new NotFoundException(`Country ${id} not found`);
+    return { deleted: id };
   }
 }
