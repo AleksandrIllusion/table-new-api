@@ -32,4 +32,8 @@ export class UpdateThemeDto {
   @IsOptional() @IsBoolean() button_full?: boolean;
   @IsOptional() @IsIn(["left","center","right"]) payments_align?: string;
   @IsOptional() @IsIn(["left","center"]) bonus_align?: string;
+
+  // --- animation presets ---
+  @IsOptional() @IsIn(["none","pulse","float","spin","glow"]) logo_anim?: string;
+  @IsOptional() @IsIn(["none","pulse","glow","shine","bounce"]) button_anim?: string;
 }
