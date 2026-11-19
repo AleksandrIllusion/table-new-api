@@ -38,4 +38,10 @@ export class UpdateThemeDto {
   // --- animation presets ---
   @IsOptional() @IsIn(["none","pulse","float","spin","glow"]) logo_anim?: string;
   @IsOptional() @IsIn(["none","pulse","glow","shine","bounce"]) button_anim?: string;
+
+  // --- button icon ---
+  @IsOptional() @IsString() @MaxLength(255) button_icon?: string;
+  @IsOptional() @IsIn(["left","right"]) button_icon_pos?: string;
+  @IsOptional() @IsInt() @Min(12) @Max(48) button_icon_size?: number;
+  @IsOptional() @IsIn(["none","spin","pulse","bounce","glow"]) button_icon_anim?: string;
 }
