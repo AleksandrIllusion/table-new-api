@@ -52,7 +52,6 @@ export class UpdateThemeDto {
   @IsOptional() @IsInt() @Min(18) @Max(48) rating_size?: number;
   @IsOptional() @IsBoolean() show_rating?: boolean;
   @IsOptional() @IsIn(["box","stars","badge","minimal","bar"]) rating_style?: string;
-}
 
   // --- header block ---
   @IsOptional() @IsInt() @Min(8) @Max(80) header_padding?: number;
@@ -62,4 +61,4 @@ export class UpdateThemeDto {
   @IsOptional() @IsBoolean() rating_in_header?: boolean;
   @IsOptional() @IsBoolean() rating_top?: boolean;
   @IsOptional() @IsBoolean() rating_bottom?: boolean;
-
+}
