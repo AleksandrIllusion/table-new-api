@@ -7,8 +7,12 @@ const COLS = [
   "header_title", "header_brand", "tagline", "pills", "badges", "logo_url",
   "accent_color", "bg_color", "card_from", "card_to",
   "button_text", "button_primary", "button_secondary",
+  "button_fg", "button_fg2",
   "card_variant", "card_radius", "badge_style", "pill_shape", "show_logo", "show_payments",
   "font_heading", "font_body", "heading_size",
+  "badge_position", "rating_position", "button_size", "button_align", "button_full", "payments_align", "bonus_align",
+  "logo_anim", "button_anim",
+  "button_icon", "button_icon_pos", "button_icon_size", "button_icon_anim",
 ];
 
 @Injectable()
