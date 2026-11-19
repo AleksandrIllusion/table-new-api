@@ -14,6 +14,8 @@ export class UpdateThemeDto {
   @IsOptional() @IsString() @MaxLength(40) button_text?: string;
   @IsOptional() @IsHexColor() button_primary?: string;
   @IsOptional() @IsHexColor() button_secondary?: string;
+  @IsOptional() @IsHexColor() button_fg?: string;
+  @IsOptional() @IsHexColor() button_fg2?: string;
   @IsOptional() @IsIn(["classic","compact","split"]) card_variant?: string;
   @IsOptional() @IsInt() @Min(0) @Max(40) card_radius?: number;
   @IsOptional() @IsIn(["bar","corner"]) badge_style?: string;
