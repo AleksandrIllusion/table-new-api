@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { CreateCountryCodeDto } from "./dto/create-country-code.dto";
 import { UpdateCountryCodeDto } from "./dto/update-country-code.dto";
 import { CloneStorefrontDto } from "./dto/clone-storefront.dto";
+import { CopyStorefrontDto } from "./dto/copy-storefront.dto";
 
 @Injectable()
 export class CountryCodesService {
@@ -94,6 +95,52 @@ export class CountryCodesService {
         [created.id, src.id],
       );
       return { country_code: created, casinos_copied: copied.length };
+    });
+  }
+
+  /**
+   * Copy storefront onto an existing country code: replace target's
+   * cp_casino_country_code rows with the source code's casino set.
+   * Ratings (casino_rate) are global, so the ranked list matches the source.
+   */
+  async copyStorefront(dto: CopyStorefrontDto) {
+    return this.ds.transaction(async (m) => {
+      if (dto.source_country_code_id === dto.target_country_code_id) {
+        throw new BadRequestException("Source and target country codes must differ");
+      }
+
+      const [src] = await m.query(
+        `SELECT * FROM cp_country_codes WHERE id = $1`,
+        [dto.source_country_code_id],
+      );
+      if (!src) {
+        throw new NotFoundException(
+          `Source country code ${dto.source_country_code_id} not found`,
+        );
+      }
+
+      const [target] = await m.query(
+        `SELECT * FROM cp_country_codes WHERE id = $1`,
+        [dto.target_country_code_id],
+      );
+      if (!target) {
+        throw new NotFoundException(
+          `Target country code ${dto.target_country_code_id} not found`,
+        );
+      }
+
+      await m.query(
+        `DELETE FROM cp_casino_country_code WHERE country_code_id = $1`,
+        [target.id],
+      );
+      const copied = await m.query(
+        `INSERT INTO cp_casino_country_code (casino_id, country_code_id)
+         SELECT casino_id, $1 FROM cp_casino_country_code WHERE country_code_id = $2
+         RETURNING casino_id`,
+        [target.id, src.id],
+      );
+
+      return { target, casinos_copied: copied.length };
     });
   }
 }

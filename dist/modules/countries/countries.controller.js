@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const jwt_auth_guard_1 = require("../../common/guards/jwt-auth.guard");
 const countries_service_1 = require("./countries.service");
 const create_country_dto_1 = require("./dto/create-country.dto");
+const update_country_dto_1 = require("./dto/update-country.dto");
 let CountriesController = class CountriesController {
     constructor(service) {
         this.service = service;
@@ -24,6 +25,10 @@ let CountriesController = class CountriesController {
     findAll() { return this.service.findAll(); }
     byCode(code) { return this.service.findByCountryCode(code); }
     create(dto) { return this.service.create(dto); }
+    update(id, dto) {
+        return this.service.update(id, dto);
+    }
+    remove(id) { return this.service.remove(id); }
 };
 exports.CountriesController = CountriesController;
 __decorate([
@@ -47,6 +52,23 @@ __decorate([
     __metadata("design:paramtypes", [create_country_dto_1.CreateCountryDto]),
     __metadata("design:returntype", void 0)
 ], CountriesController.prototype, "create", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Put)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_country_dto_1.UpdateCountryDto]),
+    __metadata("design:returntype", void 0)
+], CountriesController.prototype, "update", null);
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Delete)(":id"),
+    __param(0, (0, common_1.Param)("id", common_1.ParseIntPipe)),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", void 0)
+], CountriesController.prototype, "remove", null);
 exports.CountriesController = CountriesController = __decorate([
     (0, common_1.Controller)("countries"),
     __metadata("design:paramtypes", [countries_service_1.CountriesService])
