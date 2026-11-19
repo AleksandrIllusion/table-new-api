@@ -11,11 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateGeolocationDto = void 0;
 const class_validator_1 = require("class-validator");
+/** ISO country code stored in `cp_geolocation.country` (e.g. CY, GB, UK). */
 class CreateGeolocationDto {
 }
 exports.CreateGeolocationDto = CreateGeolocationDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MinLength)(1),
+    (0, class_validator_1.Matches)(/^[A-Za-z]{2,10}$/, { message: "country must be a 2–10 letter ISO code" }),
     __metadata("design:type", String)
 ], CreateGeolocationDto.prototype, "country", void 0);

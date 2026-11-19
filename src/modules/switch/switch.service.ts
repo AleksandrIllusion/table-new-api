@@ -17,9 +17,6 @@ const LOG_LIMIT = 15_000;
 const LOG_PURGE_COUNT = 500;
 const HOST_RE = /^[a-zA-Z0-9.-]+$/;
 
-/** ISO GB and common UK labels are treated as the same country for cloaker matching. */
-const UK_COUNTRY_ALIASES = new Set(["uk", "gb", "united kingdom"]);
-
 @Injectable()
 export class SwitchService {
   constructor(@InjectDataSource() private readonly ds: DataSource) {}
@@ -125,10 +122,15 @@ export class SwitchService {
     return this.ds.query(`SELECT * FROM cp_geolocation ORDER BY country ASC`);
   }
 
+  /**
+   * Persist an ISO country **code** in `cp_geolocation.country` (e.g. CY, GB, UK).
+   * Shift FE creates/resolves these rows, then links domains via cloaker_id + country_id.
+   */
   async createCountry(dto: CreateGeolocationDto) {
-    const country = dto.country.trim();
+    const country = dto.country.trim().toUpperCase();
+    if (!country) throw new BadRequestException("country code is required");
     const [dup] = await this.ds.query(
-      `SELECT id FROM cp_geolocation WHERE country = $1`,
+      `SELECT id FROM cp_geolocation WHERE lower(country) = lower($1)`,
       [country],
     );
     if (dup) throw new ConflictException(`Country ${country} already exists`);
@@ -268,14 +270,11 @@ export class SwitchService {
   }
 
   /**
-   * Exact match (case/whitespace-insensitive), plus UK ↔ GB ↔ United Kingdom.
-   * Configured cloaker country "UK"/"United Kingdom" therefore passes visitor "GB".
+   * Code equality only: visitor `user.country` vs stored `cp_geolocation.country`
+   * (ISO codes like CY/GB/UK). Case- and whitespace-insensitive; no name aliases.
    */
   private countriesMatch(visitorCountry: string, configuredCountry: string): boolean {
-    const a = visitorCountry.trim().toLowerCase();
-    const b = configuredCountry.trim().toLowerCase();
-    if (a === b) return true;
-    return UK_COUNTRY_ALIASES.has(a) && UK_COUNTRY_ALIASES.has(b);
+    return visitorCountry.trim().toLowerCase() === configuredCountry.trim().toLowerCase();
   }
 
   private safeHost(value: string): string {
