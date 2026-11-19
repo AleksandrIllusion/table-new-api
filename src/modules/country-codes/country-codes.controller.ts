@@ -6,6 +6,7 @@ import { CountryCodesService } from "./country-codes.service";
 import { CreateCountryCodeDto } from "./dto/create-country-code.dto";
 import { UpdateCountryCodeDto } from "./dto/update-country-code.dto";
 import { CloneStorefrontDto } from "./dto/clone-storefront.dto";
+import { CopyStorefrontDto } from "./dto/copy-storefront.dto";
 
 @Controller("country-codes")
 export class CountryCodesController {
@@ -24,6 +25,11 @@ export class CountryCodesController {
   @UseGuards(JwtAuthGuard)
   @Post("clone")
   clone(@Body() dto: CloneStorefrontDto) { return this.service.clone(dto); }
+
+  // Статический путь до :id — copy-storefront не должен матчиться как id.
+  @UseGuards(JwtAuthGuard)
+  @Post("copy-storefront")
+  copyStorefront(@Body() dto: CopyStorefrontDto) { return this.service.copyStorefront(dto); }
 
   @UseGuards(JwtAuthGuard)
   @Put(":id")
