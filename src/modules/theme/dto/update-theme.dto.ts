@@ -23,4 +23,13 @@ export class UpdateThemeDto {
   @IsOptional() @IsString() @MaxLength(40) font_heading?: string;
   @IsOptional() @IsString() @MaxLength(40) font_body?: string;
   @IsOptional() @IsInt() @Min(20) @Max(64) heading_size?: number;
+
+  // --- card layout / positions ---
+  @IsOptional() @IsIn(["tl","tr","bl","br"]) badge_position?: string;
+  @IsOptional() @IsIn(["left","right"]) rating_position?: string;
+  @IsOptional() @IsIn(["sm","md","lg"]) button_size?: string;
+  @IsOptional() @IsIn(["left","center","right"]) button_align?: string;
+  @IsOptional() @IsBoolean() button_full?: boolean;
+  @IsOptional() @IsIn(["left","center","right"]) payments_align?: string;
+  @IsOptional() @IsIn(["left","center"]) bonus_align?: string;
 }

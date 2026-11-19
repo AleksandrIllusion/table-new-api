@@ -9,6 +9,7 @@ const COLS = [
   "button_text", "button_primary", "button_secondary",
   "card_variant", "card_radius", "badge_style", "pill_shape", "show_logo", "show_payments",
   "font_heading", "font_body", "heading_size",
+  "badge_position", "rating_position", "button_size", "button_align", "button_full", "payments_align", "bonus_align",
 ];
 
 @Injectable()
