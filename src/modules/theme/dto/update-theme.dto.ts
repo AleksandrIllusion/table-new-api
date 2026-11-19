@@ -44,4 +44,11 @@ export class UpdateThemeDto {
   @IsOptional() @IsIn(["left","right"]) button_icon_pos?: string;
   @IsOptional() @IsInt() @Min(12) @Max(48) button_icon_size?: number;
   @IsOptional() @IsIn(["none","spin","pulse","bounce","glow"]) button_icon_anim?: string;
+
+  // --- logo / rating / title ---
+  @IsOptional() @IsInt() @Min(32) @Max(96) logo_size?: number;
+  @IsOptional() @IsIn(["before","after"]) logo_order?: string;
+  @IsOptional() @IsBoolean() show_title?: boolean;
+  @IsOptional() @IsInt() @Min(18) @Max(48) rating_size?: number;
+  @IsOptional() @IsBoolean() show_rating?: boolean;
 }
