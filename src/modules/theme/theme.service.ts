@@ -23,8 +23,18 @@ const COLS = [
 export class ThemeService {
   constructor(@InjectDataSource() private readonly ds: DataSource) {}
 
+  private normalizeLogoUrl(value: unknown): string | null {
+    if (value == null) return null;
+    if (typeof value !== "string") return null;
+    const trimmed = value.trim();
+    return trimmed.length > 0 ? trimmed : null;
+  }
+
   async get() {
     const [row] = await this.ds.query(`SELECT * FROM cp_storefront_theme WHERE id = 1`);
+    if (row && "logo_url" in row) {
+      row.logo_url = this.normalizeLogoUrl(row.logo_url);
+    }
     return row;
   }
 
@@ -33,8 +43,9 @@ export class ThemeService {
     const values: any[] = [];
     let i = 1;
     for (const key of COLS) {
-      const v = (dto as any)[key];
+      let v = (dto as any)[key];
       if (v === undefined) continue;
+      if (key === "logo_url") v = this.normalizeLogoUrl(v);
       fields.push(`${key} = $${i++}`);
       values.push(key === "pills" || key === "badges" ? JSON.stringify(v) : v);
     }
