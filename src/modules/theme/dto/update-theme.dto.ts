@@ -51,4 +51,5 @@ export class UpdateThemeDto {
   @IsOptional() @IsBoolean() show_title?: boolean;
   @IsOptional() @IsInt() @Min(18) @Max(48) rating_size?: number;
   @IsOptional() @IsBoolean() show_rating?: boolean;
+  @IsOptional() @IsIn(["box","stars","badge","minimal","bar"]) rating_style?: string;
 }

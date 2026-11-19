@@ -1,4 +1,4 @@
--- Все миграции витрины 004–009, идемпотентно. Применять можно повторно.
+-- Все миграции витрины 004–010, идемпотентно. Применять можно повторно.
 
 -- ===== 004_fonts_and_payments.sql =====
 -- Шрифты темы + сид 20 платёжных методов с логотипами (Simple Icons CDN, белые).
@@ -86,5 +86,12 @@ ALTER TABLE cp_storefront_theme
   ADD COLUMN IF NOT EXISTS show_title  BOOLEAN     NOT NULL DEFAULT true,
   ADD COLUMN IF NOT EXISTS rating_size INTEGER     NOT NULL DEFAULT 30,       -- px, 18..48
   ADD COLUMN IF NOT EXISTS show_rating BOOLEAN     NOT NULL DEFAULT true;
+COMMIT;
+
+-- ===== 010_rating_style.sql =====
+-- Стиль блока рейтинга.
+BEGIN;
+ALTER TABLE cp_storefront_theme
+  ADD COLUMN IF NOT EXISTS rating_style VARCHAR(8) NOT NULL DEFAULT 'box'; -- box|stars|badge|minimal|bar
 COMMIT;
 

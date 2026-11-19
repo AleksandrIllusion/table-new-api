@@ -14,6 +14,7 @@ const COLS = [
   "logo_anim", "button_anim",
   "button_icon", "button_icon_pos", "button_icon_size", "button_icon_anim",
   "logo_size", "logo_order", "show_title", "rating_size", "show_rating",
+  "rating_style",
 ];
 
 @Injectable()
