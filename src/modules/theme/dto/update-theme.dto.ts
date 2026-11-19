@@ -53,3 +53,13 @@ export class UpdateThemeDto {
   @IsOptional() @IsBoolean() show_rating?: boolean;
   @IsOptional() @IsIn(["box","stars","badge","minimal","bar"]) rating_style?: string;
 }
+
+  // --- header block ---
+  @IsOptional() @IsInt() @Min(8) @Max(80) header_padding?: number;
+  @IsOptional() @IsInt() @Min(0) @Max(80) header_margin_bottom?: number;
+
+  // --- rating slots ---
+  @IsOptional() @IsBoolean() rating_in_header?: boolean;
+  @IsOptional() @IsBoolean() rating_top?: boolean;
+  @IsOptional() @IsBoolean() rating_bottom?: boolean;
+
