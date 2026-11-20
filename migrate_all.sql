@@ -1,4 +1,4 @@
--- Все миграции витрины 004–010, идемпотентно. Применять можно повторно.
+-- Все миграции витрины 004–012, идемпотентно. Применять можно повторно.
 
 -- ===== 004_fonts_and_payments.sql =====
 -- Шрифты темы + сид 20 платёжных методов с логотипами (Simple Icons CDN, белые).
@@ -95,14 +95,11 @@ ALTER TABLE cp_storefront_theme
   ADD COLUMN IF NOT EXISTS rating_style VARCHAR(8) NOT NULL DEFAULT 'box'; -- box|stars|badge|minimal|bar
 COMMIT;
 
-
--- ===== 011_header_rating_slots.sql =====
--- Header padding/margins + rating slots top/bottom + optional header-row rating.
+-- ===== 012_header_style_position.sql =====
+-- Стиль и положение блока header витрины.
 BEGIN;
 ALTER TABLE cp_storefront_theme
-  ADD COLUMN IF NOT EXISTS header_padding INTEGER NOT NULL DEFAULT 28,
-  ADD COLUMN IF NOT EXISTS header_margin_bottom INTEGER NOT NULL DEFAULT 24,
-  ADD COLUMN IF NOT EXISTS rating_in_header BOOLEAN NOT NULL DEFAULT TRUE,
-  ADD COLUMN IF NOT EXISTS rating_top BOOLEAN NOT NULL DEFAULT FALSE,
-  ADD COLUMN IF NOT EXISTS rating_bottom BOOLEAN NOT NULL DEFAULT FALSE;
+  ADD COLUMN IF NOT EXISTS header_position VARCHAR(6) NOT NULL DEFAULT 'top',  -- top|bottom
+  ADD COLUMN IF NOT EXISTS header_style    VARCHAR(8) NOT NULL DEFAULT 'card'; -- card|bar|minimal
 COMMIT;
+

@@ -17,6 +17,7 @@ const COLS = [
   "rating_style",
   "header_padding", "header_margin_bottom",
   "rating_in_header", "rating_top", "rating_bottom",
+  "header_position", "header_style",
 ];
 
 @Injectable()

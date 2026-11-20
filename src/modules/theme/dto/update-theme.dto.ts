@@ -61,4 +61,8 @@ export class UpdateThemeDto {
   @IsOptional() @IsBoolean() rating_in_header?: boolean;
   @IsOptional() @IsBoolean() rating_top?: boolean;
   @IsOptional() @IsBoolean() rating_bottom?: boolean;
+
+  // --- header style / position ---
+  @IsOptional() @IsIn(["top","bottom"]) header_position?: string;
+  @IsOptional() @IsIn(["card","bar","minimal"]) header_style?: string;
 }
